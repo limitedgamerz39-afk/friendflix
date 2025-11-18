@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  # MongoDB service
+  mongodb:
+    image: mongo:5.0
+    container_name: friendflix-mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - friendflix-network
+
+  # MinIO service
+  minio:
+    image: minio/minio:latest
+    container_name: friendflix-minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - friendflix-network
+
+  # Backend service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: friendflix-backend
+    restart: always
+    ports:
+      - "5001:5001"
+      - "9091:9091"
+    environment:
+      - NODE_ENV=production
+      - PORT=5001
+      - MONGO_URI=mongodb://admin:password@mongodb:27017/friendflix?authSource=admin
+      - JWT_SECRET=friendflix_jwt_secret
+      - MINIO_ENDPOINT=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MONITORING_PORT=9091
+    depends_on:
+      - mongodb
+      - minio
+    networks:
+      - friendflix-network
+
+  # Prometheus service
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: friendflix-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - friendflix-network
+
+  # Node Exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: friendflix-node-exporter
+    restart: always
+    ports:
+      - "9100:9100"
+    networks:
+      - friendflix-network
+
+  # Grafana service
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: friendflix-grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - friendflix-network
+
+volumes:
+  mongodb_data:
+  minio_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  friendflix-network:
+    driver: bridge

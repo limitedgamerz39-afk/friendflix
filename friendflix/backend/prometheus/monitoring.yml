@@ -1,0 +1,27 @@
+# Friendflix Application Monitoring Configuration
+
+# Node.js application metrics
+- job_name: 'friendflix-backend'
+  static_configs:
+    - targets: ['backend:5001']
+  metrics_path: '/metrics'
+  scrape_interval: 10s
+
+# MongoDB metrics
+- job_name: 'mongodb'
+  static_configs:
+    - targets: ['mongodb:27017']
+  scrape_interval: 30s
+
+# MinIO metrics
+- job_name: 'minio'
+  static_configs:
+    - targets: ['minio:9000']
+  metrics_path: '/minio/v2/metrics/cluster'
+  scrape_interval: 30s
+
+# System metrics
+- job_name: 'node-exporter'
+  static_configs:
+    - targets: ['node-exporter:9100']
+  scrape_interval: 15s

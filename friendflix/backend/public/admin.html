@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friendflix Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #e50914;
+            --sidebar-width: 250px;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            background: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 0;
+            padding: 12px 20px;
+        }
+        
+        .sidebar .nav-link:hover, 
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+        
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+        
+        .stat-card {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .table th {
+            border-top: none;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="sidebar col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" id="dashboard-link">
+                                <i class="bi bi-speedometer2 me-2"></i>Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="users-link">
+                                <i class="bi bi-people me-2"></i>Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="posts-link">
+                                <i class="bi bi-card-text me-2"></i>Posts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="ads-link">
+                                <i class="bi bi-badge-ad me-2"></i>Advertisements
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="reports-link">
+                                <i class="bi bi-flag me-2"></i>Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="settings-link">
+                                <i class="bi bi-gear me-2"></i>Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Admin Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-calendar"></i> Last 7 days
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4" id="stats-section">
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Total Users</h6>
+                                <h3 class="card-text">1,248</h3>
+                                <small class="text-success"><i class="bi bi-arrow-up"></i> 12% increase</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Total Posts</h6>
+                                <h3 class="card-text">5,642</h3>
+                                <small class="text-success"><i class="bi bi-arrow-up"></i> 8% increase</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Blocked Users</h6>
+                                <h3 class="card-text">24</h3>
+                                <small class="text-danger"><i class="bi bi-arrow-down"></i> 3% decrease</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <h6 class="card-title text-muted">Reports</h6>
+                                <h3 class="card-text">8</h3>
+                                <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> 2 pending</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Sections -->
+                <div id="content-section">
+                    <!-- Dashboard Content -->
+                    <div id="dashboard-content">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">User Activity</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="activityChart" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">Content Distribution</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="contentChart" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Content -->
+                    <div id="users-content" style="display: none;">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">User Management</h5>
+                                <button class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus"></i> Add User
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Posts</th>
+                                                <th>Joined</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-secondary rounded-circle me-2" style="width: 30px; height: 30px;"></div>
+                                                        <div>
+                                                            <div>John Doe</div>
+                                                            <small class="text-muted">@johndoe</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>john@example.com</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                                <td>42</td>
+                                                <td>2023-05-15</td>
+                                                <td>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-ban"></i> Block
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-secondary rounded-circle me-2" style="width: 30px; height: 30px;"></div>
+                                                        <div>
+                                                            <div>Jane Smith</div>
+                                                            <small class="text-muted">@janesmith</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>jane@example.com</td>
+                                                <td><span class="badge bg-danger">Blocked</span></td>
+                                                <td>18</td>
+                                                <td>2023-04-22</td>
+                                                <td>
+                                                    <button class="btn btn-outline-success btn-sm action-btn">
+                                                        <i class="bi bi-check-circle"></i> Unblock
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Posts Content -->
+                    <div id="posts-content" style="display: none;">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Content Management</h5>
+                                <div class="input-group" style="width: 300px;">
+                                    <input type="text" class="form-control" placeholder="Search posts...">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Post</th>
+                                                <th>User</th>
+                                                <th>Type</th>
+                                                <th>Likes</th>
+                                                <th>Comments</th>
+                                                <th>Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-secondary me-2" style="width: 50px; height: 50px;"></div>
+                                                        <div>
+                                                            <div>Beautiful sunset at the beach</div>
+                                                            <small class="text-muted">Nature, Photography</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>@johndoe</td>
+                                                <td><span class="badge bg-primary">Image</span></td>
+                                                <td>124</td>
+                                                <td>28</td>
+                                                <td>2023-06-10</td>
+                                                <td>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-secondary me-2" style="width: 50px; height: 50px;"></div>
+                                                        <div>
+                                                            <div>My weekend vlog</div>
+                                                            <small class="text-muted">Travel, Vlog</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>@janesmith</td>
+                                                <td><span class="badge bg-info">Video</span></td>
+                                                <td>87</td>
+                                                <td>15</td>
+                                                <td>2023-06-08</td>
+                                                <td>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-trash"></i> Delete
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ads Content -->
+                    <div id="ads-content" style="display: none;">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="card-title mb-0">Advertisement Management</h5>
+                                <button class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus"></i> Create Ad
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Ad Name</th>
+                                                <th>Type</th>
+                                                <th>Provider</th>
+                                                <th>Status</th>
+                                                <th>Impressions</th>
+                                                <th>Clicks</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Home Banner Ad</td>
+                                                <td><span class="badge bg-warning">Banner</span></td>
+                                                <td>AdMob</td>
+                                                <td><span class="badge bg-success">Active</span></td>
+                                                <td>12,458</td>
+                                                <td>842</td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm action-btn me-1">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Interstitial Reward</td>
+                                                <td><span class="badge bg-success">Rewarded</span></td>
+                                                <td>AdMob</td>
+                                                <td><span class="badge bg-secondary">Inactive</span></td>
+                                                <td>2,156</td>
+                                                <td>187</td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm action-btn me-1">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reports Content -->
+                    <div id="reports-content" style="display: none;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">User Reports</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Reporter</th>
+                                                <th>Reported User</th>
+                                                <th>Reason</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>@user123</td>
+                                                <td>@offensiveuser</td>
+                                                <td>Inappropriate content</td>
+                                                <td>2023-06-12</td>
+                                                <td><span class="badge bg-warning">Pending</span></td>
+                                                <td>
+                                                    <button class="btn btn-outline-primary btn-sm action-btn me-1">
+                                                        <i class="bi bi-eye"></i> Review
+                                                    </button>
+                                                    <button class="btn btn-outline-success btn-sm action-btn me-1">
+                                                        <i class="bi bi-check"></i> Resolve
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm action-btn">
+                                                        <i class="bi bi-x"></i> Dismiss
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('#content-section > div').forEach(div => {
+                    div.style.display = 'none';
+                });
+                
+                // Show the corresponding content section
+                const sectionId = this.id.replace('-link', '-content');
+                document.getElementById(sectionId).style.display = 'block';
+            });
+        });
+
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Activity Chart
+            const activityCtx = document.getElementById('activityChart').getContext('2d');
+            new Chart(activityCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Active Users',
+                        data: [120, 190, 130, 180, 210, 250, 180],
+                        borderColor: '#e50914',
+                        backgroundColor: 'rgba(229, 9, 20, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Content Chart
+            const contentCtx = document.getElementById('contentChart').getContext('2d');
+            new Chart(contentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Images', 'Videos', 'Text'],
+                    datasets: [{
+                        data: [65, 25, 10],
+                        backgroundColor: [
+                            '#e50914',
+                            '#f50000',
+                            '#ff5252'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

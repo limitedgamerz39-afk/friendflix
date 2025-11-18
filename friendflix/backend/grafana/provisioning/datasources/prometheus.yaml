@@ -1,0 +1,19 @@
+# Configuration file version
+apiVersion: 1
+
+# List of data sources to insert/update depending on what's available in the database.
+datasources:
+  # Sets the name you use to refer to the data source in panels and queries.
+  - name: Prometheus
+    # Sets the data source type.
+    type: prometheus
+    # Sets the access mode, either proxy or direct (Server or Browser in the UI).
+    access: proxy
+    # Sets the data source's URL, including the port.
+    url: http://prometheus:9090
+    # Toggles whether the data source is pre-selected for new panels.
+    isDefault: true
+    # Allows users to edit data sources from the Grafana UI.
+    editable: true
+    # Used to compare versions when updating.
+    version: 1
